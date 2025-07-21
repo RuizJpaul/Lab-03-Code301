@@ -3,6 +3,9 @@ import { useState } from "react"
 import Card from "./components/Card"
 import ContactList from "./components/ContactList";
 import Header from "./components/Header";
+import Filter from "./components/Filter";
+import ClearContact from "./components/ClearContact";
+import Footer from "./components/Footer";
 
 export default function App(){
   
@@ -16,7 +19,7 @@ export default function App(){
       name: "Luis Ruiz",
       phone: "+51 967816984",
       isFavorite: true,
-    },
+    }, 
     {
       id: 2,
       name: "Julia Arones",
@@ -38,12 +41,52 @@ export default function App(){
   }
 
   const handleSelectContact = (contact) => {
-    alert(`Seleccionaste ${contact.name}`);
+    // alert(`Seleccionaste ${contact.name}`);
     setSelectedCard(contact);
   }
 
   const handleChangeFavorite = (event) => {
     setShowOnlyFavorites(event.target.checked);
+  }
+
+  const handleClearContact = () => {
+    setSelectedCard(null);
+  }
+
+  const handleNextContact = (selectedContact) => {
+
+    if(selectedContact === null){
+      setSelectedCard(contactsToShow[0]);
+      return;
+    }
+    else{
+      const currentIndex = contactsToShow.findIndex((contact) => contact.id === selectedContact.id);
+
+      if(currentIndex === contactsToShow.length-1){
+        setSelectedCard(contactsToShow[0]);
+        return;
+      }
+
+      setSelectedCard(contactsToShow[currentIndex+1])
+    }
+  }
+
+  const handlePreviousContact = (selectedContact) => {
+
+    if(selectedContact === null){
+      setSelectedCard(contactsToShow[contactsToShow.length-1]);
+      return;
+    }
+    else{
+      const currentIndex = contactsToShow.findIndex((contact) => contact.id === selectedContact.id);
+
+      if(currentIndex === 0){
+        setSelectedCard(contactsToShow[contactsToShow.length-1]);
+        return;
+      }
+
+      setSelectedCard(contactsToShow[currentIndex-1])
+    }
   }
 
   const toggleFavorite = (id) => {
@@ -73,43 +116,69 @@ export default function App(){
       width:"100%",
       height: "100vh",
       background: "#F1F3F4",
-      border: "solid 1px black",
       display: "flex",
-      justifyContent: "center",
-      alignItems: "center"
+      flexDirection: "column",
+      fontFamily: "Nunito"
     }}>
+      <Header />
       <main style={{
         textAlign: "center",
-        width: "80%",
+        width: "100%",
         height: "80%",
-        border: "solid 1px red"
+        background: "#F9FAFB",
+        color: "#111827",
+        display: "flex"
       }}>
-        <Header />
-        <section style={{
-          width: "100%",
-          height: "10%"
-        }}>
-          <label htmlFor="">
-            <h3>Filtros</h3>
-            <input type="checkbox" onChange={handleChangeFavorite} />
-            Mostrar Favoritos
-          </label>
-        </section>
-
-        <ContactList contactsToShow={contactsToShow} onSelectContact={handleSelectContact} />
-
         <div style={{
-          width: "100%",
-          height: "70%",
+          width: "10%",
+          height: "100%",
+          background: "#1E3A8A",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-around"
+        }}>
+          <div style={{
+            fontSize: 22
+          }}>
+            Contactos
+            <div>
+              {contacts.length}📕
+            </div>
+          </div>
+        </div>
+        <div style={{
+          width: "20%",
+          height: "100%",
+          border: "solid 1px yellow"
+        }}> 
+          <div style={{
+            height: "10%",
+            width: "100%",
+            display: "flex",
+          }}>
+            <Filter handleChangeFavorite={handleChangeFavorite} />
+            <ClearContact handleClearContact={handleClearContact} />
+          </div>
+          <div style={{
+            height: "90%",
+            width: "100%"
+          }}>
+            <ContactList contactsToShow={contactsToShow} onSelectContact={handleSelectContact} selectedContact={selectedCard} handleNextContact={handleNextContact} handlePreviousContact={handlePreviousContact}/>
+          </div>
+        </div>
+        <div style={{
+          width: "70%",
+          height: "100%",
           display: "flex",
           justifyContent: "space-around",
-          flexWrap: "wrap",
+          alignItems: "center",
+          // flexWrap: "wrap",
           border: "solid green 1px"
         }}>
-          {selectedCard ? 
-          (<Card card={selectedCard} toggleFavorite={toggleFavorite}/>) : null}
+          <Card card={selectedCard} toggleFavorite={toggleFavorite}/>
         </div>
       </main>
+      <Footer />
     </div>
   )
 }

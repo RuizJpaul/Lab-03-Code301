@@ -1,28 +1,49 @@
-export default function ContactList({contactsToShow, onSelectContact}){
+export default function ContactList({contactsToShow, onSelectContact, selectedContact, handleNextContact, handlePreviousContact}){
     return (
         <div style={{
           width: "100%",
-          height: "10%",
+          height: "100%",
           display: "flex",
           gap: 20,
-          justifyContent: "center"
+          justifyContent: "center",
+          flexDirection: "column"
         }}>
-          {contactsToShow.map((contact) => (
-            <div key={contact.id}>
-              <button 
-              onClick={() => {
-                onSelectContact(contact);
-              }}
-              style={{
-                background: "#1A73E8",
-                border: "none",
-                padding: "10px 12px",
-                color: "#fff",
-                borderRadius: 8
-                }}>
-                  Contacto {contact.id}</button>
-            </div>
-          ))}
+          <div style={{
+            width: "100%",
+            height: "80%",
+            display: "flex",
+            flexDirection: "column"
+          }}>
+              {contactsToShow.map((contact) => (
+              <div key={contact.id} style={{
+                width: "100%",
+                height: "15%"
+              }}>
+                <button 
+                onClick={() => {
+                  onSelectContact(contact);
+                }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  background: selectedContact?.id === contact.id ? "#3ada49" : "#2f7cff",
+                  border: "none",
+                  color: "#fff",
+                  }}>
+                    Contacto {contact.id}</button>
+              </div>
+            ))}
+          </div>
+          <div style={{
+            width: "100%",
+            height: "20%",
+            display: "flex",
+            justifyContent: "center",
+            gap: "5%"
+          }}>
+            <button style={{height: "30%", width: "20%", background: "gray", border: "none"}} onClick={() => handlePreviousContact(selectedContact)}>⬅️</button>
+            <button style={{height: "30%", width: "20%", background: "gray", border: "none"}} onClick={() => handleNextContact(selectedContact)}>➡️</button>
+          </div>
         </div>
     )
 }

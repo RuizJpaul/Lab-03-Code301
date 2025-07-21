@@ -3,7 +3,11 @@ export default function Header(){
         <h1 style={{
           width: "100%",
           height: "10%",
-          color: "#202124"
-        }}>Contact Manager 📞</h1>
+          background: "#1E3A8A",
+          color: "white",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}>CONTACT MANAGER 📞</h1>
     )
 }
